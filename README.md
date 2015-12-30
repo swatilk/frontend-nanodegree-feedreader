@@ -2,6 +2,14 @@
 
 In this project you are given a web-based application that reads RSS feeds. The original developer of this application clearly saw the value in testing, they've already included [Jasmine](http://jasmine.github.io/) and even started writing their first test suite! Unfortunately, they decided to move on to start their own company and we're now left with an application with an incomplete test suite. That's where you come in.
 
+## Setup
+
+To run the project, download all the files,
+* Run `npm install -g grunt-cli` on terminal, to install grunt cli.
+* Now run `npm install` to install all the dependencies mentioned in package.json.
+* Run `grunt` command.
+* This step will create a folder named **dest**, which holds the minified js and css files. The **index.html** file currently refers to the proper minified file paths and there is no need to alter them for the app to function as desired.
+* Now open the **index.html** file in the browser to see the app functions.
 
 ## Why this Project?
 
