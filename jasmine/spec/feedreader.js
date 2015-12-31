@@ -31,29 +31,33 @@ $(function() {
          * in the allFeeds object and ensures it has a URL defined
          * and that the URL is not empty.
          */
-         function testURL(feedItem){
-             it('ensures URL is defined in the object and is not empty', function(){
+         var feedItem;
+         function test(feed){
+            return feed;
+         }
+         it(' have defined and non empty URLs', function(){
+            allFeeds.forEach(function(feed){
+                feedItem = test(feed);
                 expect(feedItem.url).toBeDefined();
                 expect(feedItem.url).not.toBe("");
-             });
+            });
 
-         }
+         });
+
+
 
          /* Test that loops through each feed
          * in the allFeeds object and ensures it has a name defined
          * and that the name is not empty.
          */
-         function testName(feedItem){
-            it('ensures name is defined for each object and is not empty', function(){
+
+            it('have defined and non empty names', function(){
+                allFeeds.forEach(function(feed){
+                    feedItem = test(feed);
+                });
                 expect(feedItem.name).toBeDefined();
                 expect(feedItem.name).not.toBe("");
-             });
-        }
-
-         for(var i = 0; i < allFeeds.length; i++){
-            testURL(allFeeds[i]);
-            testName(allFeeds[i]);
-         }
+            });
     });
 
 
@@ -61,7 +65,8 @@ $(function() {
 
     describe('The menu', function() {
         var body = $('body'),
-            menu_icon = $('.menu-icon-link');
+            menuIcon = $('.menu-icon-link'),
+            menuPanel = $('.feed-list');
 
          /* Test that ensures the menu element is
          * hidden by default. You'll have to analyze the HTML and
@@ -69,7 +74,7 @@ $(function() {
          * hiding/showing of the menu element.
          */
 
-        it('element is hidden by default', function(){
+        it(' is hidden by default', function(){
             expect(body).toHaveClass('menu-hidden');
         });
 
@@ -79,13 +84,24 @@ $(function() {
           * clicked and does it hide when clicked again.
           */
 
-        it('ensures the menu changes visibility when the menu icon is clicked', function(){
-            menu_icon.click();
+        it(' changes visibility when the menu icon is clicked', function(){
+            menuIcon.click();
             expect(body).not.toHaveClass('menu-hidden');
 
-            menu_icon.click();
+            menuIcon.click();
             expect(body).toHaveClass('menu-hidden');
         });
+
+        /* Test that ensures the menu hides when an element
+         * from the feed-list is chosen
+         */
+
+        it(' hides when clicked on a menu-item', function(){
+            var spyEvent = spyOnEvent(menuPanel.children('li'), 'click');
+            menuPanel.children('li').click();
+            expect(spyEvent).toHaveBeenTriggered();
+            expect(body).toHaveClass('menu-hidden');
+         });
 
     });
 
@@ -102,16 +118,13 @@ $(function() {
 
 
          beforeEach(function(done){
-            loadFeed(0, function(){
-                done();
-            });
+            loadFeed(0, done);
          });
 
          var feed = $('.feed');
-         it('has atleast one entry element within "feed" container', function(done){
+         it(' has atleast one entry element', function(){
             expect(feed[0].children[0].children[0]).toBeDefined();
             expect(feed[0].children[0].children[0]).toHaveClass('entry');
-            done();
          });
     });
 
@@ -132,16 +145,18 @@ $(function() {
                 });
 
             });
-            it('ensures when a new feed is loaded, that the content actually changes', function(done){
+            it(' actually changes the content', function(done){
                 $('.feed').empty();
                 loadFeed(0, function(){
                     feed_two = $('.feed').find('h2').text();
+                    console.log(feed_one);
+                    console.log(feed_two);
+                    expect(feed_one).not.toEqual("");
+                    expect(feed_two).not.toEqual("");
+                    expect(feed_one).not.toEqual(feed_two);
                     done();
                 });
-                expect(feed_one).not.toEqual("");
-                expect(feed_two).not.toEqual("");
-                expect(feed_one).not.toEqual(feed_two);
-                done();
+
             });
         });
 }());
